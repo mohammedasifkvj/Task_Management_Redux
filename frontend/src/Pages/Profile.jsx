@@ -1,7 +1,5 @@
-import { useSelector } from 'react-redux';
-import { useState } from 'react';
-
-import { useDispatch } from 'react-redux';
+import { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import {
   updateUserStart,
   updateUserSuccess,
@@ -19,6 +17,10 @@ import {
   const [formData, setFormData] = useState({ password: '' });
   const [errors, setErrors] = useState({ password: '' });
   const [loading, setLoading] = useState(false);
+
+  const [showDeletePopup, setShowDeletePopup] = useState(false);
+  const [selectedUser, setSelectedUser] = useState(null);
+
 
   const validate = (name, value) => {
     switch (name) {
@@ -103,6 +105,12 @@ import {
     }
   };
 
+  // Show delete popup
+  const confirmDelete = () => {
+    setSelectedUser();
+    setShowDeletePopup(true);
+  };
+
   return (
     <div className='p-3 max-w-lg mx-auto'>
       <h1 className='text-3xl font-semibold text-center my-7'>Profile</h1>
@@ -140,7 +148,7 @@ import {
       </form>
       <div className='flex justify-between mt-5'>
         <span
-          onClick={handleDeleteAccount}
+          onClick={() => confirmDelete()}
           className='text-red-700 cursor-pointer'>
           Delete Account
         </span>
@@ -148,6 +156,33 @@ import {
           Sign out
         </span>
       </div>
+      
+      {/* Delete Confirmation Popup */}
+      {showDeletePopup && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
+          <div className="bg-white p-6 rounded shadow-lg w-1/3">
+            <h2 className="text-xl font-bold mb-4 text-center">Delete Account</h2>
+            <p className="text-gray-700 text-center mb-6">
+              Are you sure you want to delete your Account ?<strong>{selectedUser}</strong> ?
+            </p>
+            <div className="flex justify-around">
+              <button
+                onClick={() => setShowDeletePopup(false)}
+                className="bg-gray-500 text-white py-2 px-4 rounded hover:bg-gray-600"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={() => handleDeleteAccount(selectedUser)}
+                className="bg-red-500 text-white py-2 px-4 rounded hover:bg-red-600"
+              >
+                Delete
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
     </div>
   );
 }
