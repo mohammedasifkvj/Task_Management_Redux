@@ -3,12 +3,30 @@ import bcryptjs from 'bcryptjs';
 // import User from '../models/userModel.js';
 
 import User from '../models/taskModel.js';
+
 import { errorHandler } from '../utils/error.js';
 
 export const test = (req, res) => {
   res.json({
     message: 'API is working!',
   });
+};
+
+// Get tasks for the current user
+export const taskLoad=async (req, res) => {
+  try {
+    const userId = req.user.id; // Ensure you extract the user's ID from the token
+    const user = await User.findById(userId).select('tasks');
+console.log(user,"ghsdhj");
+
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    res.json({ tasks: user.tasks });
+  } catch (error) {
+    res.status(500).json({ message: 'Error fetching tasks', error });
+  }
 };
 
 // update user

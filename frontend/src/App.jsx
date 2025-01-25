@@ -7,6 +7,7 @@ import Home from "./Pages/Home"
 import SignIn from './Pages/SignIn';
 import SignUp from './Pages/SignUp';
 import Profile from './Pages/Profile';
+import Tasks from './Pages/Tasks';
 
 function App() {
   return (
@@ -18,6 +19,7 @@ function App() {
         <Route path='/sign-up' element={<SignUp />} />
         <Route element={<PrivateRoute />}>
           <Route path='/profile' element={<Profile />} />
+          <Route path='/tasks' element={<Tasks />} />
         </Route>
       </Routes>
     </BrowserRouter>

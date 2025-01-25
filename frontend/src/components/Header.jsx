@@ -24,6 +24,13 @@ export default function Header() {
               <li>Sign In</li>
             )}
           </Link>
+          <Link to='/tasks'>
+            {currentUser ? (
+              <li>Task</li>
+            ) : (
+              <li></li>
+            )}
+          </Link>
         </ul>
       </div>
     </div>

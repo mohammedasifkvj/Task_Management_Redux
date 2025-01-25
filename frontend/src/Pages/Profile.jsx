@@ -163,7 +163,7 @@ import {
           <div className="bg-white p-6 rounded shadow-lg w-1/3">
             <h2 className="text-xl font-bold mb-4 text-center">Delete Account</h2>
             <p className="text-gray-700 text-center mb-6">
-              Are you sure you want to delete your Account ?<strong>{selectedUser}</strong> ?
+              Are you sure you want to delete your account ?
             </p>
             <div className="flex justify-around">
               <button
@@ -186,4 +186,4 @@ import {
     </div>
   );
 }
-export default Profile
+export default Profile;

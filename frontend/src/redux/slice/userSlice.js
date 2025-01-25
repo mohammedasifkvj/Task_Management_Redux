@@ -1,9 +1,21 @@
 import { createSlice } from '@reduxjs/toolkit';
 
+// const initialState = {
+//   currentUser: null,
+//   loading: false,
+//   error: false,
+// };
+
 const initialState = {
   currentUser: null,
   loading: false,
   error: false,
+  columns: [
+    { id: 'TODO', title: 'To Do' },
+    { id: 'IN_PROGRESS', title: 'Work in Progress' },
+    { id: 'DONE', title: 'Completed' },
+  ],
+  tasks: [], // Initialize tasks as an empty array
 };
 
 const userSlice = createSlice({
@@ -51,6 +63,16 @@ const userSlice = createSlice({
       state.loading = false;
       state.error = false;
     },
+    setTasks: (state, action) => {
+      state.tasks = action.payload;
+    },
+    updateTaskStatus: (state, action) => {
+      const { taskId, newStatus } = action.payload;
+      const task = state.tasks.find((task) => task._id === taskId);
+      if (task) {
+        task.status = newStatus;
+      }
+    },
   },
 });
 
@@ -65,6 +87,8 @@ export const {
   deleteUserStart,
   deleteUserSuccess,
   signOut,
+  setTasks,
+  updateTaskStatus
 } = userSlice.actions;
 
 export default userSlice.reducer;
