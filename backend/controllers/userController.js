@@ -1,10 +1,10 @@
 import bcryptjs from 'bcryptjs';
 
-// import User from '../models/userModel.js';
-
-import User from '../models/taskModel.js';
-
 import { errorHandler } from '../utils/error.js';
+
+import User from '../models/userModel.js'
+import Task from '../models/taskModel.js';
+
 
 export const test = (req, res) => {
   res.json({
@@ -12,19 +12,68 @@ export const test = (req, res) => {
   });
 };
 
-// Get tasks for the current user
-export const taskLoad=async (req, res) => {
-  try {
-    const userId = req.user.id; // Ensure you extract the user's ID from the token
-    const user = await User.findById(userId).select('tasks');
-console.log(user,"ghsdhj");
+// Create Task
+export const createTask = async (req, res) => {
+  const userId = req.user.id; 
+  const {taskName, details } = req.body;
+  console.log("sec",req.body);
+  
 
-    if (!user) {
+  // Validate the required fields
+  if (!userId || !taskName || !details) {
+    return res.status(400).json({ message: 'userId, taskName, and details are required' });
+  }
+
+  try {
+    // Check if the user exists
+    const userExists = await User.findById(userId);
+    if (!userExists) {
       return res.status(404).json({ message: 'User not found' });
     }
 
-    res.json({ tasks: user.tasks });
+    // Find the task document for the user or create a new one if it doesn't exist
+    let taskDocument = await Task.findOne({ userId });
+    if (!taskDocument) {
+      taskDocument = new Task({ userId, taskItems: [] });
+    }
+
+    // Add the new task to the taskItems array
+    const newTask = {
+      taskName,
+      details,
+    };
+    taskDocument.taskItems.push(newTask);
+
+    // Save the task document
+    await taskDocument.save();
+
+    res.status(201).json({
+      message: 'Task created successfully',
+      task: newTask,
+    });
   } catch (error) {
+    console.error('Error creating task:', error);
+    res.status(500).json({ message: 'Internal server error', error });
+  }
+};
+// 
+
+// Get tasks for the current user
+export const getTasks = async (req, res) => {
+  try {
+    const userId = req.user.id; // Extract the user's ID from the token
+
+    // Fetch tasks associated with the user
+    const tasks = await Task.findOne({ userId });
+    console.log(tasks)
+
+    if (!tasks) {
+      return res.status(404).json({ message: 'No tasks found for this user.' });
+    }
+
+    res.json({ tasks: tasks.taskItems }); // Return the task items
+  } catch (error) {
+    console.error('Error fetching tasks:', error);
     res.status(500).json({ message: 'Error fetching tasks', error });
   }
 };

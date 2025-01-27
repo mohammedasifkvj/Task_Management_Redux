@@ -9,14 +9,17 @@ import { createSlice } from '@reduxjs/toolkit';
 const initialState = {
   currentUser: null,
   loading: false,
-  error: false,
+  
   columns: [
-    { id: 'TODO', title: 'To Do' },
-    { id: 'IN_PROGRESS', title: 'Work in Progress' },
-    { id: 'DONE', title: 'Completed' },
+    { id: 'pending', title: 'Pending Tasks' },
+    { id: 'in-progress', title: 'In Progress Tasks' },
+    { id: 'completed', title: 'Completed Tasks' },
   ],
-  tasks: [], // Initialize tasks as an empty array
+  tasks: [],
+  loading: false,
+  error: null,
 };
+
 
 const userSlice = createSlice({
   name: 'user',
@@ -65,13 +68,13 @@ const userSlice = createSlice({
     },
     setTasks: (state, action) => {
       state.tasks = action.payload;
+      state.columns = action.payload;
+       state.data=action.payload
     },
     updateTaskStatus: (state, action) => {
       const { taskId, newStatus } = action.payload;
-      const task = state.tasks.find((task) => task._id === taskId);
-      if (task) {
-        task.status = newStatus;
-      }
+      const task = state.tasks.find((t) => t._id === taskId);
+      if (task) task.status = newStatus;
     },
   },
 });

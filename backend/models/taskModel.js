@@ -1,44 +1,30 @@
 import mongoose from 'mongoose';
 
-const taskSchema = new mongoose.Schema(
-  {
-    name: {
-      type: String,
-      required: true,
+const taskSchema = new mongoose.Schema({
+    userId: {
+        type: mongoose.SchemaTypes.ObjectId,
+        ref: 'User',
+        required: true
     },
-    description: {
-      type: String,
-    },
-    status: {
-      type: String,
-      enum: ['pending', 'completed', 'done'], // Only allow these statuses
-      default: 'pending',
-    },
-  },
-  { _id: false } // Disable _id for tasks if it's not needed
-);
+    taskItems: [
+        {
+            taskName: {
+            type: String,
+            required: true,
+          },
+          details: {
+            type: String,
+            required: true,
+          },
+          status: {
+            type: String,
+            enum: ['pending', 'completed', 'done'], // Only allow these statuses
+            default: 'pending',
+          }
+        }
+    ]
+}, { timestamps: true })
 
-const userSchema = new mongoose.Schema(
-  {
-    username: {
-      type: String,
-      required: true,
-      unique: true,
-    },
-    email: {
-      type: String,
-      required: true,
-      unique: true,
-    },
-    password: {
-      type: String,
-      required: true,
-    },
-    tasks: [taskSchema], // Array of task objects
-  },
-  { timestamps: true }
-);
+const Task = mongoose.model('Task', taskSchema);
 
-const User = mongoose.model('User', userSchema);
-
-export default User;
+export default Task;

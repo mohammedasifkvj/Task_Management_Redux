@@ -32,6 +32,7 @@ app.use(express.json());
 app.use(cookieParser());
 
 app.use(express.urlencoded({ extended: true }));
+app.use(express.json()); // Ensure this middleware is added before your routes
 
 app.use('/api/auth', authRoutes);
 app.use('/api/user', userRoutes);
