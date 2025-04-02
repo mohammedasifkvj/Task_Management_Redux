@@ -8,7 +8,7 @@ const Column = ({ column, tasks = [] }) => {
       ref={setNodeRef}
       className="flex-1 bg-teal-800 rounded-md p-4 shadow-md h-screen"
     >
-      <h3 className="text-xl font-semibold mb-4 text-neutral-50">{column.title}</h3>
+      <h3 className="text-xl font-   mb-4 text-neutral-50">{column.title}</h3>
       <div className="space-y-2">
         {tasks.length > 0 ? (
           tasks.map((task) => <Task key={task._id} task={task} />)

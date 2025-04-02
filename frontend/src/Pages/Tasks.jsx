@@ -28,8 +28,12 @@ console.log(tasks)
 
       // const { tasks, columns } = response.data;
 
-      if (!tasks || !columns) {
+      if (!tasks ) {
         console.error('Invalid data structure from API:', response.data);
+        return;
+      }
+      if (!columns) {
+        console.error('Column structure from API:', response.data);
         return;
       }
 

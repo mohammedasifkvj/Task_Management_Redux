@@ -69,7 +69,6 @@ const userSlice = createSlice({
     setTasks: (state, action) => {
       state.tasks = action.payload;
       state.columns = action.payload;
-       state.data=action.payload
     },
     updateTaskStatus: (state, action) => {
       const { taskId, newStatus } = action.payload;
